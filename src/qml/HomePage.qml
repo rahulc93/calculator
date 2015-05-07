@@ -13,6 +13,8 @@ Item {
 
     anchors.fill: parent
 
+    property bool isLastElementOperator: false
+
     Rectangle {
         id: displayScreen
         anchors {
@@ -71,13 +73,17 @@ Item {
                         verticalAlignment : Text.AlignVCenter
                     }
                 }
-                
+
                 onClicked: {
                     //console.log("Button clicked: " + modelData)
                     if( modelData == "CE" ) {
                         displayScreenTextEdit.remove(0, displayScreenTextEdit.length)
+                    } else if( isLastElementOperator ) {
+                        console.log("Error: Invalid expression")
                     } else {
-                    displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                        displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                        if( modelData == "%" )
+                            isLastElementOperator = true;
                     }
                 }
             }
@@ -126,12 +132,17 @@ Item {
 
                 onClicked: {
                     //console.log("Button clicked: " + modelData)
-                    displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                    if( isLastElementOperator ) {
+                        console.log("Error: Invalid expression")
+                    } else {
+                        displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                        isLastElementOperator = true
+                    }
                 }
             }
         }
     }
-    
+
     Grid {
         id: numberGrid
         anchors {
@@ -174,7 +185,14 @@ Item {
 
                 onClicked: {
                     //console.log("Button clicked: " + modelData)
-                    displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                    if( modelData == "=" ) {
+                        //TODO: solve the expression
+                    } else if( displayScreenTextEdit.getText( displayScreenTextEdit.length - 1, displayScreenTextEdit.length ) == "." ) {
+                        console.log("Invalid expression")
+                    } else {
+                        displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                        isLastElementOperator = false
+                    }
                 }
             }
         }
