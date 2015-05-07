@@ -50,4 +50,5 @@ void Calculator::show()
     //qDebug() << "location: " << location;
     QUrl url = QUrl::fromLocalFile(location);
     m_view->setSource(url);
+    //qDebug() << "url set to " << url;
 }
