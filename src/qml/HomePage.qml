@@ -31,14 +31,114 @@ Item {
             focus: true
         }
     }
-
+    
     Grid {
-        id: numberGrid
+        id: topRowOperatorGrid
         anchors {
             right: parent.right
             top: displayScreen.bottom
             topMargin: 10
+            bottomMargin: 10
+            rightMargin: 15
+        }
+        spacing: 15
+        columns: 4
+
+        Repeater {
+            id: topRowOperatorRepeater
+            model: ["(", ")", "%", "CE"]
+
+            Button {
+                id: topROperatorButton
+
+                style: ButtonStyle {
+                    id: topRowOperatorButtonStyle
+                    background: Rectangle {
+                        id: topRowOperatorButtonStyleRectangle
+                        color: "white"
+                        implicitHeight: 40
+                        implicitWidth: 40
+                        radius: 8
+                    }
+                    label: Text {
+                        id: topRowOperatorButtonLabel
+                        anchors.centerIn: parent
+                        text: modelData
+                        font.family : "Arial"
+                        font.capitalization : Font.AllUppercase
+                        font.weight : Font.Bold
+                        horizontalAlignment : Text.AlignHCenter
+                        verticalAlignment : Text.AlignVCenter
+                    }
+                }
+                
+                onClicked: {
+                    //console.log("Button clicked: " + modelData)
+                    if( modelData == "CE" ) {
+                        displayScreenTextEdit.remove(0, displayScreenTextEdit.length)
+                    } else {
+                    displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                    }
+                }
+            }
+        }
+    }
+
+    Grid {
+        id: rightColumnOperatorGrid
+        anchors {
+            right: parent.right
+            top: topRowOperatorGrid.bottom
+            topMargin: 20
             bottomMargin: 20
+            rightMargin: 10
+        }
+        spacing: 15
+        columns: 1
+
+        Repeater {
+            id: rightColumnOperatorRepeater
+            model: ["/", "X", "-", "+"]
+
+            Button {
+                id: rightColumnOperatorButton
+
+                style: ButtonStyle {
+                    id: rightColumnOperatorButtonStyle
+                    background: Rectangle {
+                        id: rightColumnOperatorButtonStyleRectangle
+                        color: "white"
+                        implicitHeight: 40
+                        implicitWidth: 40
+                        radius: 8
+                    }
+                    label: Text {
+                        id: rightColumnOperatorButtonLabel
+                        anchors.centerIn: parent
+                        text: modelData
+                        font.family : "Arial"
+                        font.capitalization : Font.AllUppercase
+                        font.weight : Font.Bold
+                        horizontalAlignment : Text.AlignHCenter
+                        verticalAlignment : Text.AlignVCenter
+                    }
+                }
+
+                onClicked: {
+                    //console.log("Button clicked: " + modelData)
+                    displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                }
+            }
+        }
+    }
+    
+    Grid {
+        id: numberGrid
+        anchors {
+            right: rightColumnOperatorGrid.left
+            top: rightColumnOperatorGrid.top
+            bottomMargin: 20
+            rightMargin: 10
         }
         width: parent.width / 5
         spacing: 15
@@ -46,7 +146,7 @@ Item {
 
         Repeater {
             id: numberRepeater
-            model: ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "."]
+            model: ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "="]
 
             Button {
                 id: numberButton
