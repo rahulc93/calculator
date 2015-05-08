@@ -41,7 +41,7 @@ Item {
             top: displayScreen.bottom
             topMargin: 10
             bottomMargin: 10
-            rightMargin: 15
+            rightMargin: 10
         }
         spacing: 15
         columns: 4
@@ -149,7 +149,7 @@ Item {
             right: rightColumnOperatorGrid.left
             top: rightColumnOperatorGrid.top
             bottomMargin: 20
-            rightMargin: 10
+            rightMargin: 5
         }
         width: parent.width / 5
         spacing: 15
