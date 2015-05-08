@@ -14,6 +14,7 @@ Item {
     anchors.fill: parent
 
     property bool isLastElementOperator: false
+    property bool isValidExpression: true
 
     Rectangle {
         id: displayScreen
@@ -33,7 +34,29 @@ Item {
             focus: true
         }
     }
-    
+
+    Rectangle {
+        id: errorMessageArea
+        visible: !isValidExpression
+
+        anchors {
+            horizontalCenter: displayScreen.horizontalCenter
+            top: numberGrid.bottom
+            topMargin: 20
+        }
+        width: displayScreen.width
+        height: 30
+        Text {
+            id: errorMessageText
+            anchors {
+                centerIn: parent
+            }
+            text: i18n("<i>Invalid Expression Entered!</i>")
+            color: "red"
+            font.weight : Font.Bold
+        }
+    }
+
     Grid {
         id: topRowOperatorGrid
         anchors {
@@ -78,10 +101,13 @@ Item {
                     //console.log("Button clicked: " + modelData)
                     if( modelData == "CE" ) {
                         displayScreenTextEdit.remove(0, displayScreenTextEdit.length)
+                        isValidExpression = true
                     } else if( isLastElementOperator ) {
-                        console.log("Error: Invalid expression")
+                        //console.log("Error: Invalid expression")
+                        isValidExpression = false
                     } else {
                         displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                        isValidExpression = true
                         if( modelData == "%" )
                             isLastElementOperator = true;
                     }
@@ -133,9 +159,11 @@ Item {
                 onClicked: {
                     //console.log("Button clicked: " + modelData)
                     if( isLastElementOperator ) {
-                        console.log("Error: Invalid expression")
+                        //console.log("Error: Invalid expression")
+                        isValidExpression = false
                     } else {
                         displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                        isValidExpression = true
                         isLastElementOperator = true
                     }
                 }
@@ -187,10 +215,15 @@ Item {
                     //console.log("Button clicked: " + modelData)
                     if( modelData == "=" ) {
                         //TODO: solve the expression
+                        isValidExpression = true
+                        displayScreenTextEdit.remove(0, displayScreenTextEdit.length)
                     } else if( displayScreenTextEdit.getText( displayScreenTextEdit.length - 1, displayScreenTextEdit.length ) == "." ) {
-                        console.log("Invalid expression")
+                        // cannot add more than one consecutive decimals
+                        //console.log("Invalid expression")
+                        isValidExpression = false
                     } else {
                         displayScreenTextEdit.insert(displayScreenTextEdit.length, modelData)
+                        isValidExpression = true
                         isLastElementOperator = false
                     }
                 }
